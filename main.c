@@ -2,8 +2,15 @@
 #include "helpers/vector.h"
 #include "compiler.h"
 
-int main() {
-    int res = compile_file("./test.c","./test",0);
+int main(int argc, char *argv[]) {
+     printf("Number of arguments: %d\n", argc);
+    
+    printf("Arguments:\n");
+    for (int i = 0; i < argc; i++) {
+        printf("argv[%d]: %s\n", i, argv[i]);
+    }
+   // /Users/tw/Desktop/Workspace/udemy/toycompiler/test1.txt"
+    int res = compile_file(argv[1],"./test",0);
 
     if (res == COMPILER_FILE_COMPILED_OK)
     {

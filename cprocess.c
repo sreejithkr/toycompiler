@@ -3,7 +3,7 @@
 #include "compiler.h"
 
 
-struct compiler_process *complier_process_create(const char *filename, const char *filename_out, int flags) 
+struct compiler_process* complier_process_create(const char *filename, const char *filename_out, int flags) 
 {
     FILE *file = fopen(filename, "r");
     if(!file) {
@@ -19,6 +19,40 @@ struct compiler_process *complier_process_create(const char *filename, const cha
             return NULL;
         }
     }
+
     struct compiler_process* process = calloc(1,sizeof(struct compiler_process));
     process->flags = flags;
+    process->cfile.fp = file;
+    process->cfile.abs_path = filename;
+    process->ofile = out_file;
+    return process;
+}
+
+char compiler_process_next_char(struct lex_process* lex_process)
+{
+    struct compiler_process* compiler = lex_process->compiler;
+    compiler->pos.col += 1;
+    int i = getc(compiler->cfile.fp);
+    char c = (char)i;
+    if (c == '\n') {
+        compiler->pos.line += 1;
+        compiler->pos.col = 1;
+    }
+    return c;
+}
+
+char compiler_process_peek_char(struct lex_process* lex_process) {
+    struct compiler_process* compiler = lex_process->compiler;
+    compiler->pos.col += 1;
+    int i = getc(compiler->cfile.fp);
+    ungetc(i,compiler->cfile.fp);
+    char c = (char)i;
+
+    return c;
+}
+
+void compiler_process_push_char(struct lex_process* lex_process, char c)
+{
+    struct compiler_process* compiler = lex_process->compiler;
+    ungetc(c,compiler->cfile.fp);
 }
