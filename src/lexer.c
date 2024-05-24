@@ -11,7 +11,7 @@
     }
 static struct lex_process lex_process;
 static struct token tmp_token;
-
+struct token* read_next_token();
 static struct pos lex_file_position() {
     return lex_process.pos;
 }
@@ -53,6 +53,16 @@ unsigned long long read_number(){
     return atoll(s);
 
 }
+static struct token* lexer_last_token(){
+    return vector_back_or_null(lex_process.tocken_vec);
+}
+static struct token* handle_whitespace() {
+    struct token* last_token = lexer_last_token();
+    if(last_token)
+        last_token->whitespaces = true;
+    nextc();
+    return read_next_token();
+}
 
 struct token* token_make_number_for_value(unsigned long number) {
     return token_create(&(struct token){.type=TOKEN_TYPE_NUMBER,.llnum=number });
@@ -73,6 +83,11 @@ struct token* read_next_token() {
     {
     NUMERIC_CASE:
      token = token_make_number();
+    break;
+
+    case ' ':
+    case '\t':
+        token = handle_whitespace();
     break;
 
     case EOF:
@@ -100,6 +115,14 @@ int lex(struct lex_process* process) {
     {
         vector_push(process->tocken_vec,token);
         token = read_next_token();
+    }
+
+    printf("\n process %i \n", process->tocken_vec->count);
+       printf("Printing contents of the vector:\n");
+    for (int i = 0; i < vector_count(process->tocken_vec); i++) {
+        struct token *token = vector_at(process->tocken_vec, i);
+        printf("\ntoken %d:\n", token->llnum);
+      
     }
     
     return LEXICAL_ANALYSIS_ALL_OK;
