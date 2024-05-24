@@ -25,3 +25,5 @@ void* lex_process_private(struct lex_process* lex_process) {
 struct vector* lex_process_tockens(struct lex_process* lex_process){
     return lex_process->tocken_vec;
 }
+
+
