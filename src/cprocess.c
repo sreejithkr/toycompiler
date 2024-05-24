@@ -9,7 +9,6 @@ struct compiler_process* complier_process_create(const char *filename, const cha
     if(!file) {
         return NULL;
     }
-
     FILE *out_file = NULL;
     if(filename_out) 
     {
@@ -19,7 +18,6 @@ struct compiler_process* complier_process_create(const char *filename, const cha
             return NULL;
         }
     }
-
     struct compiler_process* process = calloc(1,sizeof(struct compiler_process));
     process->flags = flags;
     process->cfile.fp = file;

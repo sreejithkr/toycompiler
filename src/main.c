@@ -10,7 +10,7 @@ int main(int argc, char *argv[]) {
         printf("argv[%d]: %s\n", i, argv[i]);
     }
    // /Users/tw/Desktop/Workspace/udemy/toycompiler/test1.txt"
-    int res = compile_file(argv[1],"./test",0);
+    int res = compile_file(argv[1],"./testdir/test",0);
 
     if (res == COMPILER_FILE_COMPILED_OK)
     {

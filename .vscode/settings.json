@@ -1,0 +1,10 @@
+{
+    "files.associations": {
+        "buffer.h": "c",
+        "queue": "c",
+        "stack": "c",
+        "random": "c",
+        "atomic": "c",
+        "bitset": "c"
+    }
+}
