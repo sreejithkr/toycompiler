@@ -24,7 +24,7 @@ all: ${OBJECTS}
 	gcc ./helpers/vector.c ${INCLUDES} -o ../build/helpers/vector.o -g -c 
 
 clean:
-	rm ../main
+	rm ../out/main
 	rm -rf ${OBJECTS}
 	rm -rf ../out/main.sSYM/
 
