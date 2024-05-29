@@ -4,12 +4,12 @@
 #include "helpers/vector.h"
 #include "lexer_internal.h"
 
-struct token* token_make_number_for_value(unsigned long number) {
+struct token* generate_number_token_for_value(unsigned long number) {
     return token_create(&(struct token){.type=TOKEN_TYPE_NUMBER,.llnum=number });
 }
 
-struct token* token_make_number() {
-    return token_make_number_for_value(read_number());
+struct token* generate_number_token() {
+    return generate_number_token_for_value(read_number());
 }
 
 const char* read_number_str() {

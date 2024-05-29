@@ -3,6 +3,7 @@
 #include <string.h>
 #include "helpers/vector.h"
 #include "lexer_internal.h"
+#include <stdarg.h>
 
 
 static struct lex_process lex_process;
@@ -30,6 +31,29 @@ void pushc(char c){
     lex_process.function->push_char(&lex_process,c);
 }
 
+void lexer_error(const char* msg,...) {
+    va_list args;
+    va_start(args,msg);
+    compiler_error(lex_process.compiler,msg,args);    
+    va_end(args);
+}
+
+void print_token(struct token token){
+    switch (token.type)
+    {
+    case TOKEN_TYPE_NUMBER:
+         printf("\ntoken %llu:\n", token.llnum);
+        break;
+    case TOKEN_TYPE_STRING:
+         printf("\ntoken %s:\n", token.sval);
+        break;
+    case TOKEN_TYPE_OPERATOR:
+         printf("\ntoken %s:\n", token.sval);
+         break;
+    default:
+        break;
+    }
+}
 
 struct token* token_create(struct token* _token){
     memcpy(&tmp_token,_token,sizeof(struct token));
@@ -38,7 +62,7 @@ struct token* token_create(struct token* _token){
 }
 
 
-static struct token* lexer_last_token(){
+struct token* lexer_last_token(){
     return vector_back_or_null(lex_process.tocken_vec);
 }
 static struct token* handle_whitespace() {
@@ -50,17 +74,28 @@ static struct token* handle_whitespace() {
 }
 
 
-
-
 struct token* read_next_token() {
-
+    struct token* temp = NULL;
     struct token* token = NULL;
 
     char c = peekc();
     switch (c)  
     {
     NUMERIC_CASE:
-     token = token_make_number();
+     token = generate_number_token();
+    break;
+
+    OPERATOR_CASE_EXCLUDING_DIVISION:
+        temp = generate_include_string_token();
+        if (temp == NULL) {
+            token = generate_operator_token();
+        } else {
+             token = temp;
+        }   
+    break;
+
+    case '"':
+     token = generate_string_token('\"','\"');
     break;
 
     case ' ':
@@ -78,6 +113,16 @@ struct token* read_next_token() {
     }
 
     return token;
+}
+
+void lex_intiate_expresession_processing() {
+    lex_process.current_expression_count++;
+    if (lex_process.current_expression_count == 1) {
+        lex_process.parentheses_buffer = buffer_create();
+    }
+}
+bool is_lex_expression_being_processed() {
+    return lex_process.current_expression_count > 0;
 }
 
 int lex(struct lex_process* process) {
@@ -98,9 +143,22 @@ int lex(struct lex_process* process) {
        printf("Printing contents of the vector:\n");
     for (int i = 0; i < vector_count(process->tocken_vec); i++) {
         struct token *token = vector_at(process->tocken_vec, i);
-        printf("\ntoken %llu:\n", token->llnum);
+       print_token(*token);
       
     }
     
     return LEXICAL_ANALYSIS_ALL_OK;
 }
+
+
+/**
+ * 
+ *     TOKEN_TYPE_IDENTIFIER,
+    TOKEN_TYPE_KEYWORD,
+    TOKEN_TYPE_OPERATOR,
+    TOKEN_TYPE_SYMBOL,
+    TOKEN_TYPE_NUMBER,
+    TOKEN_TYPE_STRING,
+    TOKEN_TYPE_COMMENT,
+    TOKEN_TYPE_NEWLINE
+*/

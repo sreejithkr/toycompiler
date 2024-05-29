@@ -3,19 +3,11 @@
 
 #include <stdio.h>
 #include <stdbool.h>
+#include <string.h>
 
-#define NUMERIC_CASE \
-    case '0':       \
-    case '1':       \
-    case '2':       \
-    case '3':       \
-    case '4':       \
-    case '5':       \
-    case '6':       \
-    case '7':       \
-    case '8':       \
-    case '9'
 
+#define IF_STRING_EQUAL(str1, str2) \
+    ((str1 != NULL && str2 != NULL) ? (strcmp(str1, str2) == 0) : 0)
 
 enum {
     LEXICAL_ANALYSIS_ALL_OK,
