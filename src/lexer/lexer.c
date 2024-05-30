@@ -44,12 +44,15 @@ void print_token(struct token token){
     case TOKEN_TYPE_NUMBER:
          printf("\ntoken %llu:\n", token.llnum);
         break;
+
+    case TOKEN_TYPE_OPERATOR:
     case TOKEN_TYPE_STRING:
          printf("\ntoken %s:\n", token.sval);
         break;
-    case TOKEN_TYPE_OPERATOR:
-         printf("\ntoken %s:\n", token.sval);
+    case TOKEN_TYPE_SYMBOL:
+         printf("\ntoken %c:\n", token.cval);
          break;
+    
     default:
         break;
     }
@@ -94,6 +97,10 @@ struct token* read_next_token() {
         }   
     break;
 
+    SYMBOL_CASE:
+        token = generage_symbol_token();
+    break;
+
     case '"':
      token = generate_string_token('\"','\"');
     break;
@@ -118,6 +125,13 @@ struct token* read_next_token() {
 void lex_intiate_expresession_processing() {
     lex_process.current_expression_count++;
     if (lex_process.current_expression_count == 1) {
+        lex_process.parentheses_buffer = buffer_create();
+    }
+}
+
+void lex_conclude_expresession_processing() {
+    lex_process.current_expression_count--;
+    if (lex_process.current_expression_count < 0) {
         lex_process.parentheses_buffer = buffer_create();
     }
 }

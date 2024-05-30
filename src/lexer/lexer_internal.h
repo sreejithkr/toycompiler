@@ -40,11 +40,23 @@
     case '.':                            \
     case '?'
 
+#define SYMBOL_CASE \
+    case '{':        \
+    case '}':        \
+    case ':':        \
+    case ';':        \
+    case '#':        \
+    case '\\':        \
+    case ')':        \
+    case ']'        
+
+
 char nextc();
 char peekc();
 void pushc(char c);
 
 void lex_intiate_expresession_processing();
+void lex_conclude_expresession_processing();
 bool is_lex_expression_being_processed();
 struct token* lexer_last_token();
 struct token *generate_number_token_for_value(unsigned long number);
@@ -58,6 +70,8 @@ struct token* generate_include_string_token();
 
 
 struct token* generate_operator_token();
+struct token* generage_symbol_token();
+
 
 struct token *token_create(struct token *_token);
 
