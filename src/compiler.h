@@ -5,7 +5,6 @@
 #include <stdbool.h>
 #include <string.h>
 
-
 #define IF_STRING_EQUAL(str1, str2) \
     ((str1 != NULL && str2 != NULL) ? (strcmp(str1, str2) == 0) : 0)
 

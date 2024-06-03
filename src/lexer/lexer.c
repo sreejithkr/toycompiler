@@ -45,6 +45,7 @@ void print_token(struct token token){
          printf("\ntoken %llu:\n", token.llnum);
         break;
 
+    case TOKEN_TYPE_IDENTIFIER:
     case TOKEN_TYPE_OPERATOR:
     case TOKEN_TYPE_STRING:
          printf("\ntoken %s:\n", token.sval);
@@ -82,6 +83,8 @@ struct token* read_next_token() {
     struct token* token = NULL;
 
     char c = peekc();
+        printf("\n INSIDE read_next_token %c \n",c);
+
     switch (c)  
     {
     NUMERIC_CASE:
@@ -89,6 +92,7 @@ struct token* read_next_token() {
     break;
 
     OPERATOR_CASE_EXCLUDING_DIVISION:
+    printf("\n INSIDE OPERATOR_CASE_EXCLUDING_DIVISION %c",c);
         temp = generate_include_string_token();
         if (temp == NULL) {
             token = generate_operator_token();
@@ -115,7 +119,10 @@ struct token* read_next_token() {
         break;
     
     default:
-        compiler_error(lex_process.compiler,"Unexpected token\n");
+        token = generate_identifier_token();
+        if (!token) {
+             compiler_error(lex_process.compiler,"Unexpected token\n");
+        }
         break;
     }
 

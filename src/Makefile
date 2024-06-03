@@ -1,5 +1,6 @@
 OBJECTS= ../build/compiler.o ../build/cprocess.o ../build/lex_process.o ../build/lexer.o ../build/token.o ../build/helpers/buffer.o \
- ../build/helpers/vector.o ../build/lexer_number_token.o ../build/lexer_string_token.o ../build/lexer_operator_token.o ../build/lexer_symbol_token.o
+ ../build/helpers/vector.o ../build/lexer_number_token.o ../build/lexer_string_token.o ../build/lexer_operator_token.o ../build/lexer_symbol_token.o \
+ ../build/lexer_identifier_token.o
 INCLUDES= -I./
 
 all: ${OBJECTS}
@@ -33,6 +34,9 @@ all: ${OBJECTS}
 
 ../build/lexer_symbol_token.o: ./lexer/lexer_symbol_token.c
 	gcc ./lexer/lexer_symbol_token.c ${INCLUDES} -o ../build/lexer_symbol_token.o -g -c 
+
+../build/lexer_identifier_token.o: ./lexer/lexer_identifier_token.c
+	gcc ./lexer/lexer_identifier_token.c ${INCLUDES} -o ../build/lexer_identifier_token.o -g -c 
 
 ../build/helpers/buffer.o: ./helpers/buffer.c
 	gcc ./helpers/buffer.c ${INCLUDES} -o ../build/helpers/buffer.o -g -c 

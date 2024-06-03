@@ -61,6 +61,8 @@ bool is_lex_expression_being_processed();
 struct token* lexer_last_token();
 struct token *generate_number_token_for_value(unsigned long number);
 struct token *generate_number_token();
+struct token *generate_identifier_token();
+
 const char *read_number_str();
 unsigned long long read_number();
 
