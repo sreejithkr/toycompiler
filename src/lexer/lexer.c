@@ -39,12 +39,16 @@ void lexer_error(const char* msg,...) {
 }
 
 void print_token(struct token token){
+    printf("\ntoken type %i ", token.type);
+
     switch (token.type)
     {
     case TOKEN_TYPE_NUMBER:
          printf("\ntoken %llu:\n", token.llnum);
         break;
 
+
+    case TOKEN_TYPE_KEYWORD:
     case TOKEN_TYPE_IDENTIFIER:
     case TOKEN_TYPE_OPERATOR:
     case TOKEN_TYPE_STRING:
@@ -53,7 +57,9 @@ void print_token(struct token token){
     case TOKEN_TYPE_SYMBOL:
          printf("\ntoken %c:\n", token.cval);
          break;
-    
+    case TOKEN_TYPE_NEWLINE:
+     printf("\ntoken newline \n");
+         break;
     default:
         break;
     }
@@ -109,6 +115,10 @@ struct token* read_next_token() {
      token = generate_string_token('\"','\"');
     break;
 
+    case '\n':
+     token = generate_newline_token();
+    break;
+    
     case ' ':
     case '\t':
         token = handle_whitespace();
